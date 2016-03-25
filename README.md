@@ -1,13 +1,6 @@
-<!doctype html>
-<html lang="zh">
-<head>
-	<meta charset="UTF-8">
-	<title>bjax</title>
-</head>
-<link rel="stylesheet" type="text/css" href="css/mian.css" />
-<body>
+
 	<h1>bjax是基于原生JS的一个简单易用的TOOL 支持IE5+</h1>
-	<div class="bjax"></div>
+	<img src="https://github.com/Jon-Millent/bjax/blob/master/images/bjax.png?raw=true" />
 	<h2>如果您的项目仅仅需要一个AJAX的封装工具，您可以放心的使用它，他不需要任何依赖</h2>
 	<div class="show">
 		<h3>post方法 : bjax.post(url,data,callback);</h3>
@@ -34,5 +27,3 @@
 		<p class="po">})</p>
 	</div>
 	<div class="paohui"></div>
-</body>
-</html>
