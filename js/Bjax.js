@@ -1,11 +1,17 @@
 (function(window){
 	function createAjax(window){
-		this.post=function(url,data,callback){
+		this.post=function(url,data,callback,time){
+			_this=this;
+			_this.times=false;
 			var glo=this.createXHR();	
 			glo.open('post',url,true);
 			glo.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+			if(time){
+				this.timeout(time,glo);
+			}
 			glo.onreadystatechange=function(){
 			  if (glo.readyState==4){
+			  	_this.times=true;
 			    callback(glo.responseText,glo.status);
 			    }
 			}
@@ -17,8 +23,14 @@
 		};
 		this.get=function(url,data,callback){
 			var glo=this.createXHR();	
+			_this=this;
+			_this.times=false;
+			if(time){
+				this.timeout(time,glo);
+			}
 			glo.onreadystatechange=function(){
 			  if (glo.readyState==4){
+			  		 _this.times=true;
 			   		 callback(glo.responseText,glo.status);
 			   }
 			}
@@ -66,6 +78,16 @@
 			}
 			return str.substr(0,str.length-1);
 		}
+	}
+	createAjax.prototype.timeout=function(time,glo){
+		setTimeout(function(){
+		if(_this.times){
+			
+		}else{
+			console.log("超时");
+			glo.abort(); 
+		}
+		},time);
 	}
 	window.bjax=new createAjax();
 })(window);
