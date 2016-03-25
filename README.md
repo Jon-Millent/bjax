@@ -1,9 +1,8 @@
-<!doctype html>
 <html lang="zh">
 <head>
 	<meta charset="UTF-8">
 </head>
-<link rel="stylesheet" type="text/css" href="css/mian.css" />
+<link rel="stylesheet" type="text/css" href="https://github.com/Jon-Millent/bjax/blob/master/css/db.css" />
 <body>
 	<h1>bjax是基于原生JS的一个简单易用的TOOL 支持IE5+</h1>
 	<div class="bjax"></div>
