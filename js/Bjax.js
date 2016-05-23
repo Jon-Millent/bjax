@@ -6,8 +6,10 @@
 			var glo=this.createXHR();	
 			glo.open('post',url,true);
 			glo.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-			if(time){
-				this.timeout(time,glo);
+			if(typeof data=="string"){
+				glo.send(data);
+			}else{
+				glo.send(this.stringfty(data));
 			}
 			glo.onreadystatechange=function(){
 			  if (glo.readyState==4){
@@ -15,35 +17,33 @@
 			    callback(glo.responseText,glo.status);
 			    }
 			}
-			if(typeof data=="string"){
-				glo.send(data);
-			}else{
-				glo.send(this.stringfty(data));
-			}
-		};
-		this.get=function(url,data,callback){
-			var glo=this.createXHR();	
-			_this=this;
-			_this.times=false;
 			if(time){
 				this.timeout(time,glo);
 			}
+		};
+		this.get=function(url,data,callback,time){
+			var glo=this.createXHR();	
+			_this=this;
+			_this.times=false;
+			if(data){
+				if(typeof data=="string"){
+				glo.open('get',url+"?"+data+'&'+new Date().getTime(),true);
+				}else{
+					glo.open('get',url+"?"+this.stringfty(data)+'&'+new Date().getTime(),true);
+				}
+			}else{
+				glo.open('get',url,true);
+			}
+			glo.send(null);
 			glo.onreadystatechange=function(){
 			  if (glo.readyState==4){
 			  		 _this.times=true;
 			   		 callback(glo.responseText,glo.status);
 			   }
 			}
-			if(data){
-				if(typeof data=="string"){
-				glo.open('get',url+"?"+data,true);
-				}else{
-					glo.open('get',url+"?"+this.stringfty(data),true);
-				}
-			}else{
-				glo.open('get',url,true);
+			if(time){
+				this.timeout(time,glo);
 			}
-			glo.send(null);
 		}
 	}
 	createAjax.prototype.createXHR=function(){
