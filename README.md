@@ -14,10 +14,12 @@
 			<li>callback:状态4后执行的回调函数</li>
 			<li>time:可选，设置超时</li>
 		</ul>
-		<p>bjax.post("main.php",{"a":123,"b":456,"c":789},function(responseText,status){</p>
-			<p>console.log(responseText);//responseText:返回的数据</p>
-			<p>console.log(status);//status:状态码</p>
-		<p>})</p>
+		```javascript
+		bjax.post("main.php",{"a":123,"b":456,"c":789},function(responseText,status){
+			console.log(responseText);//responseText:返回的数据
+			console.log(status);//status:状态码
+		})
+		```
 	</div>
 	<div>
 		<h3>get方法 : bjax.get(url,data,callback,time);</h3>
@@ -27,11 +29,14 @@
 			<li>callback:状态4后执行的回调函数</li>
 			<li>time:可选，设置超时</li>
 		</ul>
-		<p>bjax.get("main.php?a=5&b=6",null,function(responseText,status){</p>
-			<p>console.log(responseText);//responseText:返回的数据</p>
-			<p>console.log(status);//status:状态码</p>
-		<p>})</p>
+		```javascript
+		bjax.get("main.php?a=5&b=6",null,function(responseText,status){
+			console.log(responseText);//responseText:返回的数据
+			console.log(status);//status:状态码
+		})
+		```
 	</div>
+	##版本特性
 	<ul>
 		<li>1.0.1:增加了超时函数，提升了稳定性.</li>
 	</ul>
