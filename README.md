@@ -1,8 +1,4 @@
-<html lang="zh">
-<head>
-	<meta charset="UTF-8">
-</head>
-<body>
+
 	<h1>bjax是基于原生JS的一个简单易用的TOOL 支持IE5+</h1>
 	<img src="https://github.com/Jon-Millent/bjax/blob/master/images/bjax.png?raw=true" />
 	<h2>如果您的项目仅仅需要一个AJAX的封装工具，您可以放心的使用它，他不需要任何依赖</h2>
@@ -36,5 +32,3 @@
 	<ul>
 		<li>1.0.1:增加了超时函数，提升了稳定性.</li>
 	</ul>
-</body>
-</html>
