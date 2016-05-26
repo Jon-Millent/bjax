@@ -18,7 +18,7 @@
 			    }
 			}
 			if(time){
-				this.timeout(time,glo);
+				this.timeout(time,glo,callback);
 			}
 		};
 		this.get=function(url,data,callback,time){
@@ -42,7 +42,7 @@
 			   }
 			}
 			if(time){
-				this.timeout(time,glo);
+				this.timeout(time,glo,callback);
 			}
 		}
 	}
@@ -79,14 +79,14 @@
 			return str.substr(0,str.length-1);
 		}
 	}
-	createAjax.prototype.timeout=function(time,glo){
+	createAjax.prototype.timeout=function(time,glo,fn){
 		setTimeout(function(){
-		if(_this.times){
-			
-		}else{
-			console.log("超时");
-			glo.abort(); 
-		}
+			if(_this.times){
+				
+			}else{
+				glo.abort(); 
+				fn('TimeOut','408');
+			}
 		},time);
 	}
 	window.bjax=new createAjax();
