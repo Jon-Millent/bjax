@@ -1,93 +1,127 @@
-(function(window){
-	function createAjax(window){
-		this.post=function(url,data,callback,time){
-			_this=this;
-			_this.times=false;
-			var glo=this.createXHR();	
-			glo.open('post',url,true);
-			glo.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-			if(typeof data=="string"){
-				glo.send(data);
-			}else{
-				glo.send(this.stringfty(data));
-			}
-			glo.onreadystatechange=function(){
-			  if (glo.readyState==4){
-			  	_this.times=true;
-			    callback(glo.responseText,glo.status);
-			    }
-			}
-			if(time){
-				this.timeout(time,glo,callback);
-			}
-		};
-		this.get=function(url,data,callback,time){
-			var glo=this.createXHR();	
-			_this=this;
-			_this.times=false;
-			if(data){
-				if(typeof data=="string"){
-				glo.open('get',url+"?"+data+'&'+new Date().getTime(),true);
-				}else{
-					glo.open('get',url+"?"+this.stringfty(data)+'&'+new Date().getTime(),true);
-				}
-			}else{
-				glo.open('get',url,true);
-			}
-			glo.send(null);
-			glo.onreadystatechange=function(){
-			  if (glo.readyState==4){
-			  		 _this.times=true;
-			   		 callback(glo.responseText,glo.status);
-			   }
-			}
-			if(time){
-				this.timeout(time,glo,callback);
-			}
+(function(root){
+	function Factory(){
+		this.config={
+			url:'',
+			type:'get',
+			data:'',
+			timeout:false,
+			callback:'callback_ajax',
+			jsonp:'callback',
+			header:{
+				type:'Content-Type',
+				content:'application/x-www-form-urlencoded'
+			},
+			success:function(){},
+			error:function(){}
 		}
 	}
-	createAjax.prototype.createXHR=function(){
-			if(typeof XMLHttpRequest != 'undefined'){
-				return new XMLHttpRequest();
-			}else if(typeof ActiveXObject != 'undefined'){
-				var verson=['MSXML2.XMLHttp.6.0','MSXML2.XMLHttp.3.0','MSXML2.XMLHttp'];
-				for(var i=0;i<verson.length;i++){
-					try{
-						return new ActiveXObject(verson[i]);
-					}catch(e){}
-				}
-			}else{
-				throw new Error('请升级您的浏览器');
+	Factory.prototype.ajaxObjextFactory=function(){
+		var xhr=false;
+		try{
+			xhr=new XMLHttpRequest()
+		}catch(e){
+			try {
+				xhr=new ActiveXObjext('Msxml2.XMLHTTP')
+			}catch(e){
+				xhr=new ActiveXObjext('Microsoft.XMLHTTP')
 			}
+		}
+		return xhr ? xhr : -1;
 	}
-	createAjax.prototype.stringfty=function(obj){
-		if(obj instanceof Array){
-			var str="";
-			for(var i=0;i<obj.length;i++){
-				for(var k in obj[i]){
-					var huj=k+"="+obj[i][k]+"&";
-					str+=huj;
-				}
-			}
-			return str.substr(0,str.length-1);
-		}else if(obj instanceof Object){
-			var str="";
-			for(var i in obj){
-				var huj=i+"="+obj[i]+"&";
-				str+=huj;
-			}
-			return str.substr(0,str.length-1);
+	Factory.prototype.extend=function(a,b){
+		for(i in b){
+			a[i]=b[i]
 		}
 	}
-	createAjax.prototype.timeout=function(time,glo,fn){
-		setTimeout(function(){
-			if(_this.times){
-				
-			}else{
-				glo.abort(); 
-				fn('TimeOut','408');
-			}
-		},time);
+	Factory.prototype.stringify=function(json){
+		var str='';
+		for(i in json){
+			str+=i+'='+json[i]+'&';
+		}
+		return str.substr(0,str.length-1)	
 	}
-	window.bjax=new createAjax();
-})(window);
+	Factory.prototype.ajax=function(json){
+		this.extend(this.config,json);
+
+		if(this.config.type!='jsonp'){
+
+			var xhr=this.ajaxObjextFactory();
+			var url=this.config.url;
+			var sendData=null;
+			var time='';
+			var random=new Date()
+			if(this.config.type=='get'){
+				if(this.config.data!=''){
+					if(this.config.url.indexOf('?')){
+						url+='&'+this.stringify(this.config.data)+'&'+random.getTime()
+					}else{
+						url+='?'+this.stringify(this.config.data)+'&'+random.getTime()
+					}
+					
+				}
+			}else{
+				if(this.config.data!=''){
+					sendData=this.stringify(this.config.data)
+				}
+			}
+
+			xhr.open(this.config.type,url,true);
+
+			xhr.setRequestHeader(this.config.header.type,this.config.header.content);
+
+			xhr.send(sendData);
+
+			root=this;
+			//to get datas
+			if(this.config.timeout){
+
+				time=setTimeout(function(){
+
+					root.config.error('408','timeout')
+					xhr.abort(); 
+
+				},this.config.timeout)
+
+			}
+
+
+			xhr.onreadystatechange=function(){
+
+				if(xhr.readyState==4){
+					clearInterval(time)
+
+					if(xhr.status==200){
+						root.config.success(xhr.responseText,xhr.status)
+					}else{
+						root.config.error(xhr.status)
+					}
+
+				}
+
+			}
+
+
+		}else{
+			var url=this.config.url;
+			if(url.indexOf('?')){
+				url+='&'+this.stringify(this.config.data)+'&'+this.config.jsonp+'='+this.config.callback;
+			}else{
+				url+='?'+this.stringify(this.config.data)+'&'+this.config.jsonp+'='+this.config.callback;
+			}
+			this.script=document.createElement('script');
+			this.fnscript=document.createElement('script');
+			this.fnscript.innerHTML='function '+this.config.callback+'(data){bjax.afterJsonp(data)}'
+
+			this.script.src=url;
+			document.body.appendChild(this.fnscript)
+			document.body.appendChild(this.script)
+		}
+	}
+	Factory.prototype.afterJsonp=function(data){
+		this.config.success(data)
+		document.body.removeChild(this.script);
+		document.body.removeChild(this.fnscript);
+	}
+	window.bjax = new Factory();
+
+})(window)
