@@ -1,34 +1,74 @@
-<img src="https://github.com/Jon-Millent/bjax/blob/master/images/bjax.png?raw=true" /><br />
-##post方法 : bjax.post(url,data,callback,time);<br />
-**url:要发送的地址**<br />
-
-**data:要发送的数据,可以是字符串"a=b&c=1&j=h",也可以是JSON数据 {"a":1,"b":c}",也可以是[{"a":1},{"b":2}]**
-
-**callback:状态4后执行的回调函数**<br />
-
-**time:可选，设置超时**<br />
-```javascript
-	bjax.post("main.php",{"a":123,"b":456,"c":789},function(responseText,status){
-		console.log(responseText);//responseText:返回的数据
-		console.log(status);//status:状态码
-	})
+#Bjax
+##如何开始
+**引入js文件**
+```html
+<script type="text/javascript" src="bjax.js"></script>
 ```
-##get方法 : bjax.get(url,data,callback,time);<br />
-**url:要发送的地址,url可以附加数据:"mian.php?a=1&b=5"也可以不附加数据交给data处理**<br />
+**使用**
 
-**data:要发送的数据,可以是字符串"a=b&c=1&j=h",也可以是JSON数据{"a":1,"b":c}",也可以是[{"a":1},{"b":2}],如果url附加数据请不要用这个，传递null即可**<br />
-
-**callback:状态4后执行的回调函数**<br />
-
-**time:可选，设置超时**<br />
 ```javascript
-bjax.get("main.php?a=5&b=6",null,function(responseText,status){
-	console.log(responseText);//responseText:返回的数据
-	console.log(status);//status:状态码
+//参数列表
+this.config={
+	url:'',//地址
+	type:'get',//请求类型 get|post|jsonp|
+	data:'',//发送的数据
+	timeout:false,//超时
+	callback:'callback_ajax',//跨域请求回调函数名字
+	jsonp:'callback',//跨域请求callback名称
+	header:{
+		type:'Content-Type',//设置请求头
+		content:'application/x-www-form-urlencoded'
+	},
+	success:function(){},//成功时候的回调接受两个参数  date|status
+	error:function(){}//失败的时候回调 接受一个参数(超时的时候接受两个参数) status
+}
+
+//post请求
+bjax.ajax({
+	type:'post',
+	url:'http://www.google.com/reg.php',//这个地址不挂vpn不行啊..
+	timeout:1000,
+	data:{
+		name:'aasfasd'
+	},
+	success:function(data){
+		console.log(data)
+	},
+	error:function(data){
+		console.log(data)
+	}
+})
+//get请求
+bjax.ajax({
+	type:'get',
+	url:'http://www.google.com/reg.php?name=aaa&age=bbb',
+	timeout:1000,
+	data:{
+		user:'aasfasd',
+		password:'45874'
+	},
+	success:function(data){
+		console.log(data)
+	},
+	error:function(data){
+		console.log(data)
+	}
+})
+//jsonp
+bjax.ajax({
+	type:'jsonp',
+	url:'http://www.google.com/reg.php',
+	timeout:1000,//(jsonp的时候timeout无效)
+	data:{
+		name:'aasfasd'
+	},
+	jsonp:'callback',
+	callback:'jsonp_testfn',
+	success:function(data){
+		console.log(data)
+	},
+	error:function(data){
+		console.log(data)
+	}
 })
 ```
-##版本特性
-<ul>
-	<li>1.0.2:修复了bug.</li>
-	<li>1.0.1:增加了超时函数.</li>
-</ul>
