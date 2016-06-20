@@ -1,4 +1,5 @@
 #Bjax
+![Bjax](https://github.com/Jon-Millent/bjax/blob/master/images/bjax.png)  
 ##如何开始
 **引入js文件**
 ```html
