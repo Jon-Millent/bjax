@@ -52,7 +52,7 @@
 			var random=new Date()
 			if(this.config.type=='get'){
 				if(this.config.data!=''){
-					if(this.config.url.indexOf('?')){
+					if(this.config.url.indexOf('?')!=-1){
 						url+='&'+this.stringify(this.config.data)+'&'+random.getTime()
 					}else{
 						url+='?'+this.stringify(this.config.data)+'&'+random.getTime()
