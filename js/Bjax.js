@@ -103,7 +103,7 @@
 
 		}else{
 			var url=this.config.url;
-			if(url.indexOf('?')){
+			if(url.indexOf('?')!=-1){
 				url+='&'+this.stringify(this.config.data)+'&'+this.config.jsonp+'='+this.config.callback;
 			}else{
 				url+='?'+this.stringify(this.config.data)+'&'+this.config.jsonp+'='+this.config.callback;
